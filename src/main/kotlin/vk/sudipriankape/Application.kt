@@ -1,4 +1,4 @@
-package com.example
+package vk.sudipriankape
 
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -70,7 +70,7 @@ fun Application.configureRouting() {
                     Votes.insert {
                         it[Votes.phone] = phone
                         it[Votes.artist] = artist
-                        it[Votes.timestamp] = System.currentTimeMillis()
+                        it[timestamp] = System.currentTimeMillis()
                     }
                 }
                 call.respond(HttpStatusCode.Created)

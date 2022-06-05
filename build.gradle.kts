@@ -2,6 +2,7 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val exposedVersion: String by project
+val mainClassName = "vk.sudipriankape.ApplicationKt"
 
 plugins {
     application
@@ -9,10 +10,10 @@ plugins {
     kotlin("plugin.serialization") version "1.6.21"
 }
 
-group = "com.example"
+group = "vk.sudipriankape"
 version = "0.0.1"
 application {
-    mainClass.set("com.example.ApplicationKt")
+    mainClass.set("$mainClassName")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -35,4 +36,17 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Main-Class"] = "$mainClassName"
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(
+        configurations
+            .runtimeClasspath
+            .get()
+            .map(::zipTree)
+    )
 }
